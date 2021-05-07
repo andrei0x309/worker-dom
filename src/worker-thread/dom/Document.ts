@@ -82,6 +82,7 @@ export class Document extends Element {
     this.documentElement = this; // TODO(choumx): Should be the <html> element.
 
     this.defaultView = Object.assign(global, {
+      window: this.window,
       document: this,
       addEventListener: this.addEventListener.bind(this),
       removeEventListener: this.removeEventListener.bind(this),

@@ -15,6 +15,7 @@
  */
 
 import { store as storeString } from './strings';
+import { Window } from './Window';
 import { Document } from './dom/Document';
 import { HydrateableNode } from '../transfer/TransferrableNodes';
 import { TransferrableKeys } from '../transfer/TransferrableKeys';
@@ -44,6 +45,7 @@ export function initialize(
   const window = document.defaultView;
   window.innerWidth = innerWidth;
   window.innerHeight = innerHeight;
+  window.window = new Window(document);
   if (localStorageInit.storage) {
     window.localStorage = createStorage(document, StorageLocation.Local, localStorageInit.storage);
   } else {

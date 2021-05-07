@@ -43,6 +43,7 @@ import { HTMLTableElement } from './dom/HTMLTableElement';
 import { HTMLTableRowElement } from './dom/HTMLTableRowElement';
 import { HTMLTableSectionElement } from './dom/HTMLTableSectionElement';
 import { HTMLTimeElement } from './dom/HTMLTimeElement';
+import { Window } from './window';
 import { Document } from './dom/Document';
 import { EventHandler, Event as WorkerDOMEvent } from './Event';
 import { MutationObserver } from './MutationObserver';
@@ -118,6 +119,7 @@ export interface GlobalScope {
 
 export interface WorkerDOMGlobalScope extends GlobalScope {
   document: Document;
+  window: Window;
   addEventListener: (type: string, handler: EventHandler) => void;
   removeEventListener: (type: string, handler: EventHandler) => void;
 }
