@@ -36,6 +36,7 @@ export const enum MessageType {
   IMAGE_BITMAP_INSTANCE = 10,
   GET_STORAGE = 11,
   FUNCTION = 12,
+  EXEC_WINDOW_ON_BEFORE_UNLOAD = 13,
   // NAVIGATION_PUSH_STATE = 8,
   // NAVIGATION_REPLACE_STATE = 9,
   // NAVIGATION_POP_STATE = 10,
@@ -98,6 +99,10 @@ export interface FunctionCallToWorker {
   [TransferrableKeys.functionArguments]: string;
 }
 
+export interface ExecWindowOnBeforeUnloadToWorker {
+  [TransferrableKeys.type]: MessageType.EXEC_WINDOW_ON_BEFORE_UNLOAD;
+}
+
 export type MessageToWorker =
   | EventToWorker
   | ValueSyncToWorker
@@ -106,7 +111,8 @@ export type MessageToWorker =
   | OffscreenCanvasToWorker
   | ImageBitmapToWorker
   | StorageValueToWorker
-  | FunctionCallToWorker;
+  | FunctionCallToWorker
+  | ExecWindowOnBeforeUnloadToWorker;
 
 /**
  * Can parameterize a method invocation message as a getter or setter.
@@ -122,4 +128,12 @@ export const enum GetOrSet {
 export const enum ResolveOrReject {
   RESOLVE = 1,
   REJECT = 2,
+}
+
+/**
+ * PreventOrAllowNavigation for window.onbeforeunload
+ */
+export const enum PreventOrAllowNavigation {
+  PREVENT = 1,
+  ALLOW = 2,
 }

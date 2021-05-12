@@ -299,6 +299,6 @@ export const enum ScrollIntoViewMutationIndex {
  * ]
  */
 export const enum WindowOnBeforeUnloadMutationIndex {
-  Function = 1,
+  PreventNavigation = 1,
   End = 2,
 }
