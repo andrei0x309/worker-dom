@@ -16,6 +16,8 @@
 
 import { CommandExecutorInterface } from './interface';
 import { TransferrableMutationType, WindowOnBeforeUnloadMutationIndex } from '../../transfer/TransferrableMutation';
+import { MessageType, PreventOrAllowNavigation } from '../../transfer/Messages';
+import { TransferrableKeys } from '../../transfer/TransferrableKeys';
 
 
 export const WindowOnBeforeUnloadProcessor: CommandExecutorInterface = (strings, nodeContext, workerContext, objectContext, config) => {
@@ -24,11 +26,16 @@ export const WindowOnBeforeUnloadProcessor: CommandExecutorInterface = (strings,
   return {
     execute(mutations: Uint16Array, startPosition: number, allowedMutation: boolean): number {
       if (allowedExecution && allowedMutation) {
-        const funcStoreIndex = mutations[startPosition + WindowOnBeforeUnloadMutationIndex.Function];
-        const parsedFunc = strings.hasIndex(funcStoreIndex) ? Function('return ' + strings.get(funcStoreIndex))() : undefined;
-
-        if (parsedFunc) {
-          window.onbeforeunload = parsedFunc;
+        const PreventNavigationFlag = mutations[startPosition + WindowOnBeforeUnloadMutationIndex.PreventNavigation];
+        const PreventNavigation = (PreventNavigationFlag === PreventOrAllowNavigation.PREVENT) ? true : false;
+        window.onbeforeunload = (event: Event) => {
+          workerContext.messageToWorker({
+            [TransferrableKeys.type]: MessageType.EXEC_WINDOW_ON_BEFORE_UNLOAD,
+          });
+          if (PreventNavigation) {
+            event.preventDefault();
+            return event.returnValue = true;
+          }
         }
 
       }
@@ -36,11 +43,11 @@ export const WindowOnBeforeUnloadProcessor: CommandExecutorInterface = (strings,
       return startPosition + WindowOnBeforeUnloadMutationIndex.End;
     },
     print(mutations: Uint16Array, startPosition: number): {} {
-      const funcStoreIndex = mutations[startPosition + WindowOnBeforeUnloadMutationIndex.Function];
-      const parsedFunc = strings.hasIndex(funcStoreIndex) ? Function('return ' + strings.get(funcStoreIndex))() : "none";
+      const PreventNavigationFlag = mutations[startPosition + WindowOnBeforeUnloadMutationIndex.PreventNavigation];
+      const PreventNavigation = (PreventNavigationFlag === PreventOrAllowNavigation.PREVENT) ? true : false;
       return {
         type: 'WINDOW_ONBEFOREUNLOAD',
-        parsedFunc,
+        PreventNavigation,
         allowedExecution,
       };
     },
