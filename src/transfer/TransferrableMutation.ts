@@ -30,7 +30,7 @@ export const enum TransferrableMutationType {
   STORAGE = 12,
   FUNCTION_CALL = 13,
   SCROLL_INTO_VIEW = 14,
-  WINDOW_ONBEFOREUNLOAD = 15,
+  WINDOW_ON_BEFORE_UNLOAD = 15,
 }
 
 /**
@@ -46,7 +46,7 @@ export const isUserVisibleMutation = (type: TransferrableMutationType): boolean 
     case TransferrableMutationType.STORAGE:
     case TransferrableMutationType.OFFSCREEN_CANVAS_INSTANCE:
     case TransferrableMutationType.FUNCTION_CALL:
-    case TransferrableMutationType.WINDOW_ONBEFOREUNLOAD:
+    case TransferrableMutationType.WINDOW_ON_BEFORE_UNLOAD:
       return false;
     default:
       return true;
@@ -69,7 +69,7 @@ export const DefaultAllowedMutations = [
   TransferrableMutationType.STORAGE,
   TransferrableMutationType.FUNCTION_CALL,
   TransferrableMutationType.SCROLL_INTO_VIEW,
-  TransferrableMutationType.WINDOW_ONBEFOREUNLOAD,
+  TransferrableMutationType.WINDOW_ON_BEFORE_UNLOAD,
 ];
 
 export const ReadableMutationType: { [key: number]: string } = {
@@ -88,7 +88,7 @@ export const ReadableMutationType: { [key: number]: string } = {
   12: 'STORAGE',
   13: 'FUNCTION_INVOCATION',
   14: 'SCROLL_INTO_VIEW',
-  15: 'WINDOW_ONBEFOREUNLOAD',
+  15: 'WINDOW_ON_BEFORE_UNLOAD',
 };
 
 /**

@@ -19,32 +19,30 @@ import { TransferrableMutationType, WindowOnBeforeUnloadMutationIndex } from '..
 import { MessageType, PreventOrAllowNavigation } from '../../transfer/Messages';
 import { TransferrableKeys } from '../../transfer/TransferrableKeys';
 
-
 export const WindowOnBeforeUnloadProcessor: CommandExecutorInterface = (strings, nodeContext, workerContext, objectContext, config) => {
-  const allowedExecution = config.executorsAllowed.includes(TransferrableMutationType.WINDOW_ONBEFOREUNLOAD);
+  const allowedExecution = config.executorsAllowed.includes(TransferrableMutationType.WINDOW_ON_BEFORE_UNLOAD);
 
   return {
     execute(mutations: Uint16Array, startPosition: number, allowedMutation: boolean): number {
       if (allowedExecution && allowedMutation) {
         const PreventNavigationFlag = mutations[startPosition + WindowOnBeforeUnloadMutationIndex.PreventNavigation];
-        const PreventNavigation = (PreventNavigationFlag === PreventOrAllowNavigation.PREVENT) ? true : false;
+        const PreventNavigation = PreventNavigationFlag === PreventOrAllowNavigation.PREVENT ? true : false;
         window.onbeforeunload = (event: Event) => {
           workerContext.messageToWorker({
             [TransferrableKeys.type]: MessageType.EXEC_WINDOW_ON_BEFORE_UNLOAD,
           });
           if (PreventNavigation) {
             event.preventDefault();
-            return event.returnValue = true;
+            return (event.returnValue = true);
           }
-        }
-
+        };
       }
 
       return startPosition + WindowOnBeforeUnloadMutationIndex.End;
     },
     print(mutations: Uint16Array, startPosition: number): {} {
       const PreventNavigationFlag = mutations[startPosition + WindowOnBeforeUnloadMutationIndex.PreventNavigation];
-      const PreventNavigation = (PreventNavigationFlag === PreventOrAllowNavigation.PREVENT) ? true : false;
+      const PreventNavigation = PreventNavigationFlag === PreventOrAllowNavigation.PREVENT ? true : false;
       return {
         type: 'WINDOW_ONBEFOREUNLOAD',
         PreventNavigation,

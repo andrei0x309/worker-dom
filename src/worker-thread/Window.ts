@@ -23,13 +23,13 @@ import { transfer } from './MutationTransfer';
 import { Document } from './dom/Document';
 import { Event } from './Event';
 import { TransferrableMutationType } from '../transfer/TransferrableMutation';
-import { MessageToWorker, MessageType, PreventOrAllowNavigation } from '../transfer/Messages'
+import { MessageToWorker, MessageType, PreventOrAllowNavigation } from '../transfer/Messages';
 import { TransferrableKeys } from '../transfer/TransferrableKeys';
 
 export class Window {
   private _document: Document;
   private _onBeforeUnload: Function;
-  private _onBeforeUnloadPreventNavigation: Boolean;
+  private _onBeforeUnloadPreventNavigation: boolean;
 
   constructor(document: Document) {
     this._document = document;
@@ -37,18 +37,17 @@ export class Window {
   }
 
   _executeOnBeforeUnload = ({ data }: { data: MessageToWorker }) => {
-    if (
-      data[TransferrableKeys.type] === MessageType.EXEC_WINDOW_ON_BEFORE_UNLOAD
-    ) {
+    if (data[TransferrableKeys.type] === MessageType.EXEC_WINDOW_ON_BEFORE_UNLOAD) {
       this._onBeforeUnload(new Event('onbeforeunload', { bubbles: false, cancelable: false }));
     }
   };
 
   // Custom Flag to set if onbeforeunload should prevent navigation, default is false
-  set onbeforeunloadPreventNavigation(flag: Boolean) {
-    this._onBeforeUnloadPreventNavigation = (flag) ? true : false;
+  set onbeforeunloadPreventNavigation(flag: boolean) {
+    this._onBeforeUnloadPreventNavigation = flag;
     // User called onbeforeunloadPreventNavigation after setting the onbeforeunload function
-    if (typeof this._onBeforeUnload === 'function') {
+    if (typeof this._onBeforeUnload === 'function' && flag !== this._onBeforeUnloadPreventNavigation) {
+      this._onBeforeUnloadPreventNavigation = flag;
       this.onbeforeunload(this._onBeforeUnload);
     }
   }
@@ -58,11 +57,8 @@ export class Window {
     if (typeof fun === 'function') {
       this._document.ownerDocument.addGlobalEventListener('message', this._executeOnBeforeUnload);
       this._onBeforeUnload = fun;
-      const preventNaigationFlag = (this._onBeforeUnloadPreventNavigation) ? PreventOrAllowNavigation.PREVENT : PreventOrAllowNavigation.ALLOW;
-      transfer(this._document, [
-        TransferrableMutationType.WINDOW_ONBEFOREUNLOAD,
-        preventNaigationFlag
-      ]);
+      const preventNaigationFlag = this._onBeforeUnloadPreventNavigation ? PreventOrAllowNavigation.PREVENT : PreventOrAllowNavigation.ALLOW;
+      transfer(this._document, [TransferrableMutationType.WINDOW_ON_BEFORE_UNLOAD, preventNaigationFlag]);
     } else {
       this._document.ownerDocument.removeGlobalEventListener('message', this._executeOnBeforeUnload);
     }

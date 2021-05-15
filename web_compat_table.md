@@ -193,7 +193,8 @@ This section highlights the DOM APIs that are implemented in WorkerDOM currently
 | Element.getAttributeNode()                          | ✖️     |                                                  | 
 | Element.getAttributeNodeNS()                        | ✖️     |                                                  | 
 | Element.getAttributeNS()                            | ✔️     |                                                  | 
-| Element.getBoundingClientRect()                     | ✖️     |                                                  | 
+| Element.getBoundingClientRect()                     | ✖️     |                                                  |
+| Element.getBoundingClientRectAsync() <sup>[2](#myfootnote2)</sup>| ✔️     |                                     | 
 | Element.getClientRects()                            | ✖️     |                                                  | 
 | Element.getElementsByClassName()                    | ✔️     |                                                  | 
 | Element.getElementsByTagName()                      | ✔️     |                                                  | 
@@ -913,7 +914,9 @@ This section highlights the DOM APIs that are implemented in WorkerDOM currently
 | Window.mozInnerScreenY                              | ✖️     |                                                  | 
 | Window.mozPaintCount                                | ✖️     |                                                  | 
 | Window.name                                         | ✖️     |                                                  | 
-| Window.open()                                       | ✖️     |                                                  | 
+| Window.open()                                       | ✖️     |                                                  |
+| window.onbeforeunload                               | ✔️     |                                                  | 
+| window.onbeforeunloadPreventNavigation<sup>[2](#myfootnote2)</sup>| ✔️     | Set true or false for `onbeforeunload` to try preventing navigation, default false.                                     | 
 | Window.openDialog()                                 | ✖️     |                                                  | 
 | Window.opener                                       | ✖️     |                                                  | 
 | Window.orientation                                  | ✖️     |                                                  | 
@@ -963,3 +966,4 @@ This section highlights the DOM APIs that are implemented in WorkerDOM currently
 | Worker                                              | N/A    | Doesn't apply since this is on the Worker thread | 
 
 <a name="myfootnote1">[1]</a>: querySelector(All) currently supports simple selectors i.e. ID selectors, Class selectors, Element selectors and Attribute selectors.
+<a name="myfootnote2">[2]</a>: Custom implementation not part of [Web API](https://developer.mozilla.org/en-US/docs/Web/API)

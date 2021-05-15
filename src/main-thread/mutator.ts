@@ -91,7 +91,7 @@ export class MutatorProcessor {
       [TransferrableMutationType.STORAGE]: StorageProcessor.apply(null, args),
       [TransferrableMutationType.FUNCTION_CALL]: FunctionProcessor.apply(null, args),
       [TransferrableMutationType.SCROLL_INTO_VIEW]: ScrollIntoViewProcessor.apply(null, args),
-      [TransferrableMutationType.WINDOW_ONBEFOREUNLOAD]: WindowOnBeforeUnloadProcessor.apply(null, args),
+      [TransferrableMutationType.WINDOW_ON_BEFORE_UNLOAD]: WindowOnBeforeUnloadProcessor.apply(null, args),
     };
   }
 
