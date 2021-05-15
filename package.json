@@ -119,7 +119,7 @@
       "esm"
     ],
     "files": [
-      "output/test/mutation-transfer/window.onbeforeunload.test.js"
+      "output/test/**/*.test.js"
     ]
   },
   "volta": {
